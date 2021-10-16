@@ -1,0 +1,20 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "title": "deal",
+    "type": "object",
+    "properties": {
+
+      "salePrice": {
+        "type": "string"
+      },
+      "dealType": {
+        "type": "string"
+      }
+    
+    },
+    "required": [
+      "salePrice",
+      "dealType"
+    ],
+    "additionalProperties": false
+  }

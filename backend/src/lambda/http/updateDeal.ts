@@ -4,28 +4,30 @@ import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda'
 import * as middy from 'middy'
 import { cors, httpErrorHandler } from 'middy/middlewares'
 import { getUserId } from '../utils'
-import { deleteTodo } from '../../businessLogic/todos'
-import { createLogger } from "../../utils/logger"
+import { createLogger } from "../../utils/logger";
+import { UpdateDealRequest } from '../../requests/UpdateDealRequest'
+import { updateDeal } from '../../businessLogic/deals'
 
-const logger = createLogger("deletetodo");
+const logger = createLogger("updatetodo");
 
 export const handler = middy(
   async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
-    const todoId = event.pathParameters.todoId
-    // TODO: Remove a TODO item by id
+    const dealId = event.pathParameters.dealId
+    const updatedDeal: UpdateDealRequest = JSON.parse(event.body)
     const userId = getUserId(event)
-    const deleteData = await deleteTodo(todoId, userId)
-
-    logger.info("todo DELETED", {
+    const dealItem = await updateDeal(updatedDeal, dealId, userId)
+    
+    logger.info("DEAL UPDATED", {
       
-      key: todoId,
+      key: dealId,
       userId: userId,
       date: new Date().toISOString,
     });
-
     return {
       statusCode: 200,
-      body: deleteData
+      body: JSON.stringify({
+        item: dealItem
+      })
     }
   }
 )

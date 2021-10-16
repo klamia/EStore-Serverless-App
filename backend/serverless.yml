@@ -1,7 +1,7 @@
 # TODO: Change the name of the org 
 org: klamia
-app: serverless-todo-app
-service: serverless-todo-app
+app: eStore-serverless-App
+service: eStore-serverless-App
 
 plugins:
   - serverless-webpack
@@ -23,11 +23,11 @@ provider:
   # Use these variables in the functions and resouorces section below. For example, 
   # ${self:provider.environment.ATTACHMENT_S3_BUCKET}
   environment:
-    TODOS_TABLE: Todos-${self:provider.stage}
-    TODOS_CREATED_AT_INDEX: CreatedAtIndex
-    ATTACHMENT_S3_BUCKET: serverless-802608100588-todo-bucket-${self:provider.stage}
+    DEALS_TABLE: Deals-${self:provider.stage}
+    DEALS_CREATED_AT_INDEX: CreatedAtIndex
+    IMAGE_S3_BUCKET: serverless-802608100588-deal-bucket-${self:provider.stage}
     SIGNED_URL_EXPIRATION: 300
-    PROJECT_NAME: serverless-todo-app
+    PROJECT_NAME: serverless-deal-app
 
   logs:
     # Enable API Gateway logs
@@ -49,15 +49,18 @@ custom:
     api:
       info:
         version: v1.0.0
-        title: Todos API
-        description: Serverless application for Todos managing
+        title: Deals API
+        description: Serverless application for e-store deals 
     models:
-      - name: TodoRequestCreation
+      - name: DealRequestCreation
         contentType: application/json
-        schema: ${file(models/create-todo-model.json)}
-      - name: TodoRequestUpdate
+        schema: ${file(models/create-deal-model.json)}
+      - name: DealRequestUpdate
         contentType: application/json
-        schema: ${file(models/update-todo-model.json)}  
+        schema: ${file(models/update-deal-model.json)}
+      - name: DealRequestSpecial
+        contentType: application/json
+        schema: ${file(models/special-deal-model.json)}  
 
 functions:
 

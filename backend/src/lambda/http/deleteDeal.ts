@@ -1,33 +1,31 @@
 import 'source-map-support/register'
-import { createLogger } from "../../utils/logger";
+
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda'
 import * as middy from 'middy'
 import { cors, httpErrorHandler } from 'middy/middlewares'
-import { createAttachmentPresignedUrl } from '../../businessLogic/deals';
+import { getUserId } from '../utils'
+import { createLogger } from "../../utils/logger"
+import { deleteDeal } from '../../businessLogic/deals'
 
+const logger = createLogger("deleteDeal");
 
-
-const logger = createLogger('generateUploadUrl')
 export const handler = middy(
   async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
-    logger.info('Processing Event ', event)
     const dealId = event.pathParameters.dealId
-    const URL = await createAttachmentPresignedUrl(dealId)
-    
-    logger.info("deal Image URL CREATED", {
-      // Additional information stored with a log statement
-      key: dealId, 
+    const userId = getUserId(event)
+    const deleteData = await deleteDeal(dealId, userId)
+
+    logger.info("DEAL DELETED", {
+      
+      key: dealId,
+      userId: userId,
       date: new Date().toISOString,
     });
+
     return {
       statusCode: 200,
-      body: JSON.stringify(
-        {
-          uploadUrl: URL
-        }
-      )
+      body: deleteData
     }
-
   }
 )
 

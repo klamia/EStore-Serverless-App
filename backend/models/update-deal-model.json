@@ -1,24 +1,30 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema#",
-  "title": "todo",
+  "title": "deal",
   "type": "object",
   "properties": {
     "name": {
       "type": "string",
       "pattern": "^[a-zA-Z0-9]+([ ][a-zA-Z0-9]+)*$"
     },
-    "dueDate": {
+    "description": {
       "type": "string",
-      "pattern": "^\\d{4}\\-(0?[1-9]|1[012])\\-(0?[1-9]|[12][0-9]|3[01])$"
+      "pattern": "^[a-zA-Z0-9]+([ ][a-zA-Z0-9]+)*$"
     },
-    "done": {
-      "type": "boolean"
+    "originalPrice": {
+      "type": "string"
+    },
+    "salePrice": {
+      "type": "string"
+    },
+    "dealType": {
+      "type": "string"
     }
   },
   "required": [
     "name",
-    "dueDate",
-    "done"
+    "originalPrice",
+    "dealType"
   ],
   "additionalProperties": false
 }
