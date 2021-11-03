@@ -7,18 +7,19 @@
       "type": "string",
       "pattern": "^[a-zA-Z0-9]+(\\s[a-zA-Z0-9]+)*$"
     },
-    "originalPrice": {
+    "description": {
       "type": "string"
     },
-    "dealType": {
+    "originalPrice": {
       "type": "string"
     }
+    
   
   },
   "required": [
     "name",
-    "originalPrice",
-    "dealType"
+    "originalPrice"
+    
   ],
   "additionalProperties": false
 }

@@ -6,15 +6,12 @@
 
       "salePrice": {
         "type": "string"
-      },
-      "dealType": {
-        "type": "string"
       }
     
     },
     "required": [
-      "salePrice",
-      "dealType"
+      "salePrice"
+      
     ],
     "additionalProperties": false
   }

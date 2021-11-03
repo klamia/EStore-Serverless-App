@@ -1,6 +1,6 @@
 # TODO: Change the name of the org 
 org: klamia
-app: eStore-serverless-App
+app: daily-deals-app
 service: eStore-serverless-App
 
 plugins:
@@ -9,6 +9,7 @@ plugins:
   - serverless-aws-documentation
   - serverless-iam-roles-per-function
   - serverless-plugin-tracing
+
 
 provider:
   name: aws
@@ -25,6 +26,8 @@ provider:
   environment:
     DEALS_TABLE: Deals-${self:provider.stage}
     DEALS_CREATED_AT_INDEX: CreatedAtIndex
+    DEALS_TYPE_INDEX: DealTypeIndex
+    DEALS_ID_INDEX: DealIdIndex 
     IMAGE_S3_BUCKET: serverless-802608100588-deal-bucket-${self:provider.stage}
     SIGNED_URL_EXPIRATION: 300
     PROJECT_NAME: serverless-deal-app
@@ -40,11 +43,9 @@ provider:
           Action:
             - xray:PutTelemetryRecords
             - xray:PutTraceSegments
-          Resource: "*"
-        
-        
+          Resource: "*"        
 
-custom:
+custom:  
   documentation:
     api:
       info:
@@ -63,95 +64,188 @@ custom:
         schema: ${file(models/special-deal-model.json)}  
 
 functions:
-
+  
   Auth:
     handler: src/lambda/auth/auth0Authorizer.handler
-
-  GetTodos:
-    handler: src/lambda/http/getTodos.handler
+  
+  GetAllDeals:
+    handler: src/lambda/http/getAllDeals.handler
     events:
       - http:
           method: get
-          path: todos
+          path: deals
           cors: true
           authorizer: Auth
  
-    iamRoleStatementsName: ${self:provider.environment.PROJECT_NAME}-gettodo-${self:provider.stage}
+    iamRoleStatementsName: ${self:provider.environment.PROJECT_NAME}-getdeals-${self:provider.stage}
     iamRoleStatements:
       - Effect: Allow
         Action:
           - dynamodb:Query
-        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.DEALS_TABLE}
       - Effect: Allow
         Action:
           - dynamodb:Query
-        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}/index/${self:provider.environment.TODOS_CREATED_AT_INDEX}
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.DEALS_TABLE}/index/${self:provider.environment.DEALS_CREATED_AT_INDEX}
   
-  CreateTodo:
-    handler: src/lambda/http/createTodo.handler
+  GetRegularDeals:
+    handler: src/lambda/http/getRegularDeals.handler
+    events:
+      - http:
+          method: get
+          path: RegularDeals
+          cors: true         
+ 
+    iamRoleStatementsName: ${self:provider.environment.PROJECT_NAME}-getregulardeals-${self:provider.stage}
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - dynamodb:Query
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.DEALS_TABLE}
+      - Effect: Allow
+        Action:
+          - dynamodb:Query
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.DEALS_TABLE}/index/${self:provider.environment.DEALS_TYPE_INDEX}
+  
+  GetSpecialDeals:
+    handler: src/lambda/http/getSpecialDeals.handler
+    events:
+      - http:
+          method: get
+          path: SpecialDeals
+          cors: true
+          
+ 
+    iamRoleStatementsName: ${self:provider.environment.PROJECT_NAME}-getspecialdeals-${self:provider.stage}
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - dynamodb:Query
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.DEALS_TABLE}
+      - Effect: Allow
+        Action:
+          - dynamodb:Query
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.DEALS_TABLE}/index/${self:provider.environment.DEALS_TYPE_INDEX}
+  
+  CreateDeal:
+    handler: src/lambda/http/createDeal.handler
     events:
       - http:
           method: post
-          path: todos
+          path: deals
           cors: true
           authorizer: Auth
           reqValidatorName: RequestBodyValidator
           documentation:
-            summary: Create a new todo
-            description: Create a new todo
+            summary: Create a new deal
+            description: Create a new deal
             requestModels:
-              'application/json': TodoRequestCreation
-    iamRoleStatementsName: ${self:provider.environment.PROJECT_NAME}-createtodo-${self:provider.stage}
+              'application/json': DealRequestCreation
+    iamRoleStatementsName: ${self:provider.environment.PROJECT_NAME}-createdeal-${self:provider.stage}
     iamRoleStatements:
       - Effect: Allow
         Action:
           - dynamodb:PutItem
-        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}
-
-  UpdateTodo:
-    handler: src/lambda/http/updateTodo.handler
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.DEALS_TABLE}
+      - Effect: Allow
+        Action:
+          - dynamodb:Query
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.DEALS_TABLE}/index/${self:provider.environment.DEALS_TYPE_INDEX}
+  
+  GetDeal:
+    handler: src/lambda/http/getDeal.handler
+    events:
+      - http:
+          method: get
+          path: deals/{dealId}
+          cors: true
+    iamRoleStatementsName: ${self:provider.environment.PROJECT_NAME}-getdealbyid-${self:provider.stage}
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - dynamodb:Query
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.DEALS_TABLE}
+      - Effect: Allow
+        Action:
+          - dynamodb:Query
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.DEALS_TABLE}/index/${self:provider.environment.DEALS_ID_INDEX}
+  
+  
+  UpdateDeal:
+    handler: src/lambda/http/updateDeal.handler
     events:
       - http:
           method: patch
-          path: todos/{todoId}
+          path: deals/{dealId}
           cors: true
           authorizer: Auth
           reqValidatorName: RequestBodyValidator
           documentation:
-            summary: Update a todo
-            description: update existing todo
+            summary: Update a deal
+            description: update existing deal
             requestModels:
-              'application/json': TodoRequestUpdate
-    iamRoleStatementsName: ${self:provider.environment.PROJECT_NAME}-updatetodo-${self:provider.stage}
+              'application/json': DealRequestUpdate
+    iamRoleStatementsName: ${self:provider.environment.PROJECT_NAME}-updatedeal-${self:provider.stage}
     iamRoleStatements:
       - Effect: Allow
         Action:
           - dynamodb:UpdateItem
-        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.DEALS_TABLE}
+      - Effect: Allow
+        Action:
+          - dynamodb:Query
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.DEALS_TABLE}/index/${self:provider.environment.DEALS_TYPE_INDEX}
 
-
-  DeleteTodo:
-    handler: src/lambda/http/deleteTodo.handler
+  DeleteDeal:
+    handler: src/lambda/http/deleteDeal.handler
     events:
       - http:
           method: delete
-          path: todos/{todoId}
+          path: deals/{dealId}
           cors: true
           authorizer: Auth
-    iamRoleStatementsName: ${self:provider.environment.PROJECT_NAME}-deletetodo-${self:provider.stage}
+    iamRoleStatementsName: ${self:provider.environment.PROJECT_NAME}-deletedeal-${self:provider.stage}
     iamRoleStatements:
       - Effect: Allow
         Action:
           - dynamodb:DeleteItem
-        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}
-
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.DEALS_TABLE}
+      - Effect: Allow
+        Action:
+          - dynamodb:Query
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.DEALS_TABLE}/index/${self:provider.environment.DEALS_TYPE_INDEX}
+  
+  createSpecialDeal:
+    handler: src/lambda/http/addSpecialDeal.handler
+    events:
+      - http:
+          method: patch
+          path: deals/{dealId}/special
+          cors: true
+          authorizer: Auth
+          reqValidatorName: RequestBodyValidator
+          documentation:
+            summary: update existing deal
+            description:  Update a deal from regular to special
+            requestModels:
+              'application/json': DealRequestSpecial
+    iamRoleStatementsName: ${self:provider.environment.PROJECT_NAME}-createspecialdeal-${self:provider.stage}
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - dynamodb:UpdateItem
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.DEALS_TABLE}
+      - Effect: Allow
+        Action:
+          - dynamodb:Query
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.DEALS_TABLE}/index/${self:provider.environment.DEALS_TYPE_INDEX}
 
   GenerateUploadUrl:
     handler: src/lambda/http/generateUploadUrl.handler
     events:
       - http:
           method: post
-          path: todos/{todoId}/attachment
+          path: deals/{dealId}/attachment
           cors: true
           authorizer: Auth
     iamRoleStatementsName: ${self:provider.environment.PROJECT_NAME}-uploadUrl-${self:provider.stage}
@@ -160,11 +254,15 @@ functions:
         Action:
           - s3:PutObject
           - s3:GetObject
-        Resource: arn:aws:s3:::${self:provider.environment.ATTACHMENT_S3_BUCKET}/*
+        Resource: arn:aws:s3:::${self:provider.environment.IMAGE_S3_BUCKET}/*
       - Effect: Allow
         Action:
           - dynamodb:UpdateItem
-        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.DEALS_TABLE}
+      - Effect: Allow
+        Action:
+          - dynamodb:Query
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.DEALS_TABLE}/index/${self:provider.environment.DEALS_TYPE_INDEX}
 
 resources:
   Resources:
@@ -180,37 +278,56 @@ resources:
         RestApiId:
           Ref: ApiGatewayRestApi
     
-    TodosTable:
+    DealsTable:
       Type: AWS::DynamoDB::Table
       Properties:
         AttributeDefinitions:
           - AttributeName: userId
             AttributeType: S
-          - AttributeName: todoId
+          - AttributeName: dealId
             AttributeType: S
+          - AttributeName: dealType
+            AttributeType: S  
           - AttributeName: createdAt
             AttributeType: S
         KeySchema:
           - AttributeName: userId
             KeyType: HASH
-          - AttributeName: todoId
+          - AttributeName: dealId
             KeyType: RANGE
         BillingMode: PAY_PER_REQUEST
-        TableName: ${self:provider.environment.TODOS_TABLE}
+        TableName: ${self:provider.environment.DEALS_TABLE}
         LocalSecondaryIndexes:
-          - IndexName: ${self:provider.environment.TODOS_CREATED_AT_INDEX}
+          - IndexName: ${self:provider.environment.DEALS_CREATED_AT_INDEX}
             KeySchema:
               - AttributeName: userId
                 KeyType: HASH
               - AttributeName: createdAt
                 KeyType: RANGE
             Projection:
-              ProjectionType: ALL # What attributes will be copied to an index
+              ProjectionType: ALL 
+        GlobalSecondaryIndexes: 
+          - IndexName: ${self:provider.environment.DEALS_TYPE_INDEX}
+            KeySchema: 
+              - AttributeName: dealType
+                KeyType: HASH
+              - AttributeName: createdAt
+                KeyType: RANGE
+            Projection: 
+              ProjectionType: ALL
+  
+          - IndexName: ${self:provider.environment.DEALS_ID_INDEX}
+            KeySchema:
+            - AttributeName: dealId
+              KeyType: HASH
+            Projection:
+              ProjectionType: ALL
+    
 
     AttachmentsBucket:
       Type: AWS::S3::Bucket
       Properties:
-        BucketName: ${self:provider.environment.ATTACHMENT_S3_BUCKET}
+        BucketName: ${self:provider.environment.IMAGE_S3_BUCKET}
         CorsConfiguration:
           CorsRules:
             -
@@ -237,7 +354,7 @@ resources:
               Effect: Allow
               Principal: '*'
               Action: 's3:GetObject'
-              Resource: 'arn:aws:s3:::${self:provider.environment.ATTACHMENT_S3_BUCKET}/*'
+              Resource: 'arn:aws:s3:::${self:provider.environment.IMAGE_S3_BUCKET}/*'
         Bucket: !Ref AttachmentsBucket
 
     RequestBodyValidator:

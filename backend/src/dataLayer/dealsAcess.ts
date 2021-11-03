@@ -13,17 +13,21 @@ export class DealsAcess {
 
     constructor(
       private readonly docClient: DocumentClient = createDynamoDBClient(),
-      private readonly dealsTable = process.env.DEALS_TABLE) {
-    }
+      private readonly dealsTable = process.env.DEALS_TABLE, 
+      private readonly typeIndex = process.env.DEALS_TYPE_INDEX,
+      private readonly dealIdIndex = process.env.DEALS_ID_INDEX)
+      {
+      }
   
     async getAllRegularDeals(): Promise<DealItem[]> {
       console.log('Getting all regular deals')
   
       const result = await this.docClient.query({
         TableName: this.dealsTable,
+        IndexName: this.typeIndex,
         KeyConditionExpression: 'dealType = :type',
         ExpressionAttributeValues: {
-            ':type': {"S":"Regular Deal"}
+            ':type': 'Regular Deal'
           },
           ScanIndexForward: false
       }).promise()
@@ -37,9 +41,10 @@ export class DealsAcess {
   
       const result = await this.docClient.query({
         TableName: this.dealsTable,
+        IndexName: this.typeIndex,
         KeyConditionExpression: 'dealType = :type',
         ExpressionAttributeValues: {
-            ':type': {"S":"Special Deal"}
+            ':type': 'Special Deal'
           },
           ScanIndexForward: false
       }).promise()
@@ -47,6 +52,8 @@ export class DealsAcess {
       const items = result.Items
       return items as DealItem[]
     }
+
+    
     
     async getAllDealsPerUser(userId: string): Promise<DealItem[]> {
       console.log('Getting all deals per user')
@@ -64,6 +71,24 @@ export class DealsAcess {
       return items as DealItem[]
     }
   
+    
+    async getDeal(dealId: string):Promise<DealItem>{
+      console.log('Getting  a particular deal ')
+  
+      const result =await this.docClient.query({
+        TableName: this.dealsTable,
+        IndexName : this.dealIdIndex,
+      KeyConditionExpression: 'dealId = :dealId',
+      ExpressionAttributeValues: {
+          ':dealId': dealId
+      }
+  }).promise()
+
+      const item = result.Items[0]
+      return item as DealItem
+  }
+    
+    
     async createDeal(deal: DealItem): Promise<DealItem> {
       console.log('Creating new deal')
       await this.docClient.put({
@@ -136,7 +161,7 @@ export class DealsAcess {
           '#y' : 'salePrice'
         },
         ExpressionAttributeValues: {
-          ':x': dealSpecial['dealType'],
+          ':x': 'Special Deal' ,
           ':y': dealSpecial['salePrice'],
  
         },
@@ -160,6 +185,12 @@ export class DealsAcess {
   }
   
   function createDynamoDBClient() {
-  
+    if (process.env.IS_OFFLINE) {
+      console.log('Creating a local DynamoDB instance')
+      return new XAWS.DynamoDB.DocumentClient({
+        region: 'localhost',
+        endpoint: 'http://localhost:8000'
+      })
+    }
     return new XAWS.DynamoDB.DocumentClient()
   }

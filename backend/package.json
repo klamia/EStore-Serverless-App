@@ -1,7 +1,7 @@
 {
-  "name": "serverless-todo-app",
+  "name": "serverless-deal-app",
   "version": "1.0.0",
-  "description": "Serverless TODO image app",
+  "description": "Serverless Deal app",
   "dependencies": {
     "@types/axios": "^0.14.0",
     "@types/http-errors": "^1.6.1",
@@ -32,6 +32,6 @@
     "typescript": "4.1.3",
     "webpack": "5.20.2"
   },
-  "author": "Ivan Mushketyk",
+  "author": "Lamia KHETTAR",
   "license": "MIT"
 }

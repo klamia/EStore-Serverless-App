@@ -6,15 +6,14 @@ import { verify, decode } from 'jsonwebtoken'
 import Axios from 'axios'
 import { Jwt } from '../../auth/Jwt'
 import { JwtPayload } from '../../auth/JwtPayload'
-
-//const jwkToPem = require('jwk-to-pem')
 import * as jwkToPem from 'jwk-to-pem'
+
 //const logger = createLogger('auth')
 
 // TODO: Provide a URL that can be used to download a certificate that can be used
 // to verify JWT token signature.
 // To get this URL you need to go to an Auth0 page -> Show Advanced Settings -> Endpoints -> JSON Web Key Set
-const jwksUrl = 'https://dev-019ro45e.us.auth0.com/.well-known/jwks.json'
+const jwksUrl = 'https://dev-x5orin3i.us.auth0.com/.well-known/jwks.json'
 
 export const handler = async (
   event: CustomAuthorizerEvent
