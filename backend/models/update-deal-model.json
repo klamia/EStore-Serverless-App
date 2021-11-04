@@ -11,15 +11,16 @@
       "type": "string",
       "pattern": "^[a-zA-Z0-9]+([ ][a-zA-Z0-9]+)*$"
     },
+	"dealType": {
+      "type": "string"
+    }
     "originalPrice": {
       "type": "string"
     },
     "salePrice": {
       "type": "string"
-    },
-    "dealType": {
-      "type": "string"
     }
+    
   },
   "required": [
     "name",

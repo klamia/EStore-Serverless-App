@@ -7,6 +7,7 @@ import { CreateDealRequest } from '../model/CreateDealRequest';
 import { UpdateDealRequest } from '../model/UpdateDealRequest';
 import { SpecialDealRequest } from '../model/SpecialDealRequest';
 import Axios from 'axios';
+import { environment } from 'src/environments/environment';
 
 
 @Injectable({
@@ -15,7 +16,7 @@ import Axios from 'axios';
 
 export class DealService {
 
-  apiEndpoint = 'https://ficmpgzsvc.execute-api.us-east-1.amazonaws.com/dev';
+  apiEndpoint = environment.apiHost;
   
 
   deals!: Deal[]

@@ -10,13 +10,13 @@
           <!-- forms start -->
           <div class="card mb-grid">
             <div class="card-header">
-              <div class="card-header-title">Add product</div>
+              <div class="card-header-title">Add a new Deal</div>
             </div>
             <div class="card-body">
 
               <form [formGroup]="dealForm" (ngSubmit)="onSubmit()" >
                 <div class="form-group">
-                  <label class="form-label" for="ProductName">Name of the product</label>
+                  <label class="form-label" for="ProductName">Name</label>
                   <input type="text" class="form-control" id="ProductName"
                     placeholder="Put the name of the product here" formControlName="name" required>
                 </div>

@@ -3,7 +3,14 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  appName: 'Daily-Deal-App',
+  apiHost: 'https://ficmpgzsvc.execute-api.us-east-1.amazonaws.com/dev',
+  clientID: 'YUeoSexabvMtD8lw1a1h3N228XWodT9y',
+  domain: 'dev-x5orin3i.us.auth0.com',
+  responseType: 'token id_token',
+  redirectUri: 'http://localhost:4200/callback',
+  scope: 'openid'
 };
 
 /*

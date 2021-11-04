@@ -23,13 +23,18 @@
             <span class="special" >Special</span>
             <img src="{{deal.imageUrl}}" class="card-img-top" alt="...">
           </a>
+
           <div class="card-body">
             <ul class="list-unstyled d-flex justify-content-between">
               <li class="text-muted text-barr">{{deal.originalPrice}} $</li>
               <li class="text-muted text-success">{{deal.salePrice}} $</li>
-            </ul>
-            <a >{{deal.name}}</a>
-            
+            </ul>  
+          <div class="card-text">
+            <a  class="h2 text-decoration-none text-dark" >{{deal.name}}</a>
+          </div>  
+
+            <ul class="list-unstyled d-flex justify-content-between">
+              <li>
             <a class="morebt" routerLinkActive="active" routerLink="/deals-details/{{deal.dealId}}">
               <span class="bttext">DETAILS</span>
               <div class="bticon">
@@ -38,7 +43,8 @@
                 </svg>
               </div>
             </a>
-
+          </li>
+          </ul> 
           </div>
         </div>
       </div>

@@ -13,16 +13,22 @@
             <div class="col-12 col-md-12 mb-12">
                 <div class="card h-100">
                     <div class="card-body">
-                        <ul class="list-unstyled d-flex justify-content-between">
-                            <li class="text-muted text-barr">{{deal.originalPrice}}</li>
-                            <li class="text-muted text-success">{{deal.salePrice}}</li>
+                        
+                        <ul class="list-unstyled d-flex justify-content-between" *ngIf="!deal.salePrice">
+                            <li class="text-muted">{{deal.originalPrice}}  $</li>
                         </ul>
+
+                        <ul class="list-unstyled d-flex justify-content-between" *ngIf="deal.salePrice">
+                            <li class="text-muted text-barr">{{deal.originalPrice}}  $</li>
+                            <li class="text-muted text-success">{{deal.salePrice}} $ </li>
+                        </ul>
+
                         <h1 class="h2 text-decoration-none text-dark">{{deal.name}}</h1>
                         <img src="{{deal.imageUrl}}" class="card-img-top" alt="...">
                         <p class="card-text">
                             {{deal.description}}
                         </p>
-                        <a class="morebt" (click) ="onBack()" type="button" >
+                        <a class="morebt col col-lg-3 float-right position-relative" (click) ="onBack()" type="button" >
                             <span class="bttext">Back</span>
                             <div class="bticon">
                                 <svg>
