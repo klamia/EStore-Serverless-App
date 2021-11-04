@@ -9,7 +9,7 @@
 4. [Getting Started](#getting-started)
 5. [API Endpoints](#api-endpoints)
 6. [How to use the application](#how-to-use-the-application)
-7. [Postman collection] (#postman-collection)
+7. [Postman collection](#postman-collection)
 
 
 ## Functionalities:
@@ -43,7 +43,8 @@
    # You need to have a pair of Access key (YOUR_ACCESS_KEY_ID and YOUR_SECRET_KEY) of an IAM user with Admin access permissions
    sls config credentials --provider aws --key YOUR_ACCESS_KEY_ID --secret YOUR_SECRET_KEY --profile serverless
    ```
-   * you need to edit the `environment.ts` file in the `frontend/environment` folder. This file configures your client application  and contains an API endpoint and Auth0 configuration:
+   * you need to edit the `environment.ts` file in the `frontend/environment` folder. This file configures your client application  and contains an API endpoint and Auth0      
+     configuration:
    ```ts
    const apiId = '...' API Gateway id
    export const apiEndpoint = `https://${apiId}.execute-api.us-east-1.amazonaws.com/dev`
@@ -127,8 +128,8 @@ To add an image for the newly created deal, click on the ```Image Upload``` butt
 
 ### Get details for a deal :
 To get more details on the deal, click on the ```DETAILS``` button  at the home page.
-<img src="images/deal-details-1.png" width="670" height="370">
-<img src="images/deal-details-2.png" width="670" height="370">
+<img src="images/Deal-Details-1.png" width="670" height="370">
+<img src="images/Deal-Details-2.png" width="670" height="370">
 
 ## Postman collection:
 
