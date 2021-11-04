@@ -1,7 +1,8 @@
 import {Injectable} from '@angular/core';
 import {Router} from '@angular/router';
 import * as auth0 from 'auth0-js';
-import { environment } from 'src/environments/environment';
+import { environment } from '../../environments/environment';
+
 
 // why do you need defining window as any?
 // check this: https://github.com/aws/aws-amplify/issues/678#issuecomment-389106098

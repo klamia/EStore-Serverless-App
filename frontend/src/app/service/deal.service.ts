@@ -7,7 +7,8 @@ import { CreateDealRequest } from '../model/CreateDealRequest';
 import { UpdateDealRequest } from '../model/UpdateDealRequest';
 import { SpecialDealRequest } from '../model/SpecialDealRequest';
 import Axios from 'axios';
-import { environment } from 'src/environments/environment';
+import { environment } from '../../environments/environment';
+
 
 
 @Injectable({
