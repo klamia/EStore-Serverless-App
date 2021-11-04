@@ -95,41 +95,41 @@ ng serve
 <img src="images/Auth0-Login.png" width="500" height="350">
 
 3. After authentication success, users would be redirected to their own home page where they could perform CRUD operations on the app. 
-<img src="images/User-Deals.png" width="670" height="370">
+<img src="images/User-Deals.png" width="670" height="350">
 
 ### Create a new deal 
 To create a new deal, click on ```ADD NEW DEAL``` button at the user's home page (Deals-List).
 1. Fill the fields on the form .
 2. Click ```Submit```
-<img src="images/Add-Deal.png" width="670" height="370">
+<img src="images/Add-Deal.png" width="670" height="350">
 
 ### Update a deal
 To update an existing deal, click on ```Edit``` button of the newly created deal at the user's home page (Deals-List).
 1. Make update in Edit page
 2. Click ```Submit```
-<img src="images/Edit-Deal.png" width="670" height="370">
+<img src="images/Edit-Deal.png" width="670" height="350">
 
 ### Delete a deal
 To delete a deal, click on the ```Delete``` button  of the newly created deal at the user's home page (Deals-List).
 1. Press Ok on the confirmation dialog
-<img src="images/Delete-Deal.png" width="500" height="350">
+<img src="images/Delete-Deal.png" width="500" height="320">
 
 ### Make a deal as Special Deal
 To create special deals, click on the ```Special Deal``` button of the newly created deal  at the user's home page (Deals-List).
 1. Fill the sale price field on the form
 2. Click ```Submit```
-<img src="images/add-special-deal.png" width="670" height="370">
+<img src="images/add-special-deal.png" width="670" height="350">
 
 ### Upload an image for a Deal
 To add an image for the newly created deal, click on the ```Image Upload``` button  at the user's home page (Deals-List).
 1. Click on ```Browse``` button to Choose an image to upload
 2. Click ```Upload``` to upload the image 
-<img src="images/image-upload.png" width="670" height="370">
+<img src="images/image-upload.png" width="670" height="350">
 
 ### Get details for a deal :
 To get more details on the deal, click on the ```DETAILS``` button  at the home page.
-<img src="images/Deal-Details-1.png" width="670" height="370">
-<img src="images/Deal-Details-2.png" width="670" height="370">
+<img src="images/Deal-Details-1.png" width="670" height="350">
+<img src="images/Deal-Details-2.png" width="670" height="350">
 
 ## Postman collection:
 
