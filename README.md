@@ -22,7 +22,7 @@
 - [Serverless Framework](https://www.serverless.com/) as Deployment Framework 
 - [Angular](https://angular.io/) for the Frontend 
 - [AWS](https://aws.amazon.com/) as cloud provider for following services : DynamoDB, Cloudwatch, Lambda, API Gateway, Cloudformation, S3, X-Ray, AWS SDK
-- [Auth0] using RS256 Algorithm(auth0.com)   as Authentication Framework 
+- [Auth0](auth0.com)  as Authentication Framework 
 - [Node.js](https://github.com/nodejs/node) for the Backend
 
 ## Prerequisites:
@@ -130,7 +130,7 @@ To get more details on the deal, click on the ```DETAILS``` button  at the home 
 <img src="images/deal-details-1.png" width="670" height="370">
 <img src="images/deal-details-2.png" width="670" height="370">
 
-## Postman collection
+## Postman collection:
 
 An alternative way to test the API, you can use the Postman collection that contains sample requests. You can find a Postman collection in this project. To import this collection, do the following.
 
